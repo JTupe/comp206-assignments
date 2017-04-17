@@ -1,0 +1,120 @@
+#!/bin/bash
+
+count=0
+Sum=0
+guessSum=0
+round=y
+rounds=0
+
+echo "Type 'y' to the play the game"
+	read play
+
+if test "$play" == "$round"
+then
+        while test $count -lt 10
+        do
+                number=$(( ( RANDOM % 50 ) + 1 ))
+                if test $count -eq 1
+		then
+                	replacement=$number
+                fi
+                if test $count -eq 7 
+		then
+                	replacement2=$number
+                fi
+                let count=count+1
+                Sum=`expr $number + $Sum`
+        done
+        
+	#calc two thirds of the average sum
+        twoThirdsSum=$(echo "$Sum*.66" | bc)
+	#calc .10 of two-thirds of the sum
+        tenPercent=$(echo "twoThirdsSum*.10" | bc)
+	# 10% of the 2/3rds of the average input
+        sumPlusTen=$(echo "$twoThirdsSum+$tenPercent" | bc)
+	# -10% of the 2/3rds of the average input
+        sumMinusTen=$(echo "$twoThirdsSum-$tenPercent" | bc)
+
+	counter=0
+        while test $counter -lt 3
+        do
+                echo "Guess a number between 1 and 50"
+                read guess
+                guess=$guess
+                if test "$guess" -gt "$sumMinusTen"
+                then
+                        if test "$guess" -lt "$sumPlusTen"
+                        then
+				let counter=counter+1
+                                echo "Well Done. You took $counter tries to guess!"
+        			break
+			fi
+                fi
+		
+		#use counter to replace a guess in the sum of random numbers
+                if test $counter -eq 0 
+		then
+                        Sum=`expr $Sum - $number + $guess`
+                fi
+                
+		if test $counter -eq 1
+		then
+                        Sum=`expr $Sum - $replacement + $guess`
+                fi
+                
+		if test $counter -eq 2
+		then
+                        Sum=`expr $Sum - $replacement2 + $guess`
+                fi
+		
+		#sum has now changed by replacing a random number with the guesses. Calculate the new sum.
+		#calc two thirds of the new average sum
+        	twoThirdsSum=$(echo "$Sum*.66" | bc)
+		#calc .10 of two-thirds of the new sum
+        	tenPercent=$(echo "twoThirdsSum*.10" | bc)
+		# 10% of the 2/3rds of the average input
+        	sumPlusTen=$(echo "$twoThirdsSum+$tenPercent" | bc)
+		# -10% of the 2/3rds of the average input
+        	sumMinusTen=$(echo "$twoThirdsSum-$tenPercent" | bc)
+
+                let counter=counter+1
+                if test $counter == 3
+		then
+                        echo "You Lost."
+                        break
+                fi
+                echo "Incorrect guess. Try Again"
+        done
+
+        let rounds=rounds+1
+        if [ $rounds -eq 1 ] ; then
+                g1=$counter
+        fi
+        if [ $rounds -eq 2 ] ; then
+                g2=$counter
+        fi
+        if [ $rounds -eq 3 ] ; then
+                g3=$counter
+        fi
+        if [ $rounds -eq 3 ] ; then
+                g3=$counter
+        fi
+        if [ $rounds -eq 4 ] ; then
+                g4=$counter
+        fi
+        if [ $rounds -eq 5 ] ; then
+                g5=$counter
+        fi
+
+        guessSum=`expr $guessSum + $counter`
+        if [ $rounds -eq 5 ] ; then
+                avgGame=$(echo "scale=2; $guessSum / 5" | bc)
+                echo "5 players took tries: $g1,$g2,$g3,$g4,$g5. So average is $avgGame"
+                rounds=5
+		Sum=0
+                guessSum=0
+                avgGame=0
+        fi
+        echo "do you want to play again? Type 'y' for yes."
+        read play
+done

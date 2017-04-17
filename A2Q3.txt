@@ -1,0 +1,54 @@
+#include <std.io>
+#include <stdlib.h>
+
+
+void encrypt(int argc, char **argv) 						*/ include the encrypt method that takes the filename (char*) and key (int) as input) */
+{
+
+	FILE *inputFile = fopen("argv", "rt"), *outputFile = fopen("wt", "wt");	*/ open the input file and create a file for the newly encrypted text */
+
+	if(inputFile == NULL) {							*/ check if the inputFile exists */
+		fclose(inputFile);
+		return;
+	}
+
+	while(!feof(inputFile)){						*/ while the filename is NOT at the end-of-file */
+		fgets(outputFile, sizeof(inputFile), inputFile);		*/ get the inputFile and put it into outputFile */
+	}	
+	
+	for(int i = 0; i < sizeof(inputFile); i++){
+		outputFile[i] = outputFile[i+argc];				*/ add the key (encryption) to the temp file */
+	}
+
+	fclose(inputFile);
+	fclose(outputFile);
+}
+
+
+void decryption(int argv, char* argc) {
+
+	FILE *inputFile = fopen([argc], "rt"), *outputFile = fopen("wt", "wt");	*/ open the input file and create a file for the newly encrypted text */
+
+	if(inputFile == NULL)							*/ check if the inputFile exists */
+	{
+		fclose(inputFile);
+		return;
+	}
+
+	while(!feof(inputFile))							*/ while the inputFile is NOT at the end-of-file */
+	{
+		fgets(outputFile, sizeof(inputFile), inputFile);		*/ get the inputFile and put it into outputFile */
+	}	
+	
+	for(int i = 0; i++; i < sizeof(inputFile)) 
+	{
+		outputFile[i] = outputFile[i-argc];				*/ remove the key (encryption) from the outputFile */
+		return outputFile;
+	}
+	fclose(inputFile);
+	fclose(outputFile);
+}
+
+void main(){									*/ include the main method */
+
+}

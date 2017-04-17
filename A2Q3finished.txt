@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+void encrypt(int argc, char *argv) 							/* include the encrypt method that takes the filename (char*) and key (int) as input) */
+{
+
+	FILE *inputFile = fopen("argv", "r+");						/* open the input file and create a file for the newly encrypted text*/
+	char *temp = (char *) malloc(sizeof(inputFile));									/* create a dynamic array that is the same size of the inputFile */
+	
+
+	if(inputFile == NULL) {									/* check if the inputFile exists */
+		fclose(inputFile);
+	}
+
+	while(!feof(inputFile)){								/* while the filename is NOT at the end-of-file */
+		fgets(temp, sizeof(inputFile), inputFile);			/* get the inputFile and put it into temp */
+		for(int i = 0; i < sizeof(inputFile); i++){
+		temp[i] = temp[i+argc];						/* add the shift to the temp file */
+		}
+		fprintf(inputFile, "%s", temp);					/* write temp file to inputFile*/
+	}	
+	
+	fclose(inputFile);
+}
+
+
+void decryption(int argc, char* argv) {
+
+	FILE *inputFile = fopen("argv", "r+"); 					/* open the input file and create a file for the newly encrypted text */
+	char *temp = (char *) malloc(sizeof(inputFile));			/* create a dynamic array that is the same size of the inputFile */
+
+	if(inputFile == NULL){							/* check if the inputFile exists */
+		fclose(inputFile);
+	}
+
+	while(!feof(inputFile))	{						/* while the inputFile is NOT at the end-of-file */
+		fgets(temp, sizeof(inputFile), inputFile);			/* get the inputFile and put it into temp */
+		for(int i = 0; i < sizeof(inputFile); i++){
+		temp[i] = temp[i-argc];						/* remove the shift to the temp file */
+		}
+		fprintf(inputFile, "%s", temp);					/* write temp to inputFile */
+	}	
+	fclose(inputFile);
+}
+
+int main(void){													/* include the main method */
+}

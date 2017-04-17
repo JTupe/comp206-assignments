@@ -1,0 +1,63 @@
+#!/bin/bash
+
+NewProject=$0 path=$1 project_name=$2
+
+if [ -z "$NewProject" ]; then									#step 1: test if the $ProjectName is null
+        echo "Project name is missing. Type in: NewProject path project_name."			#if true, displays an error message
+	exit
+fi
+
+if [  ! -z "$Path" ]; then									#step 2: tests if $Path is not an empty string
+       	if [ ! -d $Path ]									#tests to see if $Path is not a directory
+		echo "You're path name is maformed. Type in: NewProject path project_name." 	#if true, sends an error
+       	exit
+	fi
+fi
+
+if [[ $Name = *[^[:space:]]* ]]; then								#step 3: tests if $Name contains a whitespace (i.e is more than one word)
+	echo "Your project name must be one word and contain no spaces."			#sends error if Name contains a whitespace
+	exit
+fi
+
+if  [ -d $Path ]; then										#step 4: tests if path was provided 
+	cd $Path 										#if true, make a subdir with $Name
+	mkdir $Name
+	cd $Name
+	mkdir docs;mkdir source;mkdir backup;mkdir archive
+else												#if no path was provided,
+	mkdir $Name										#subdir $Name is created within the current directory
+	cd $Name
+	mkdir docs;mkdir source;mkdir backup;mkdir archive
+fi
+
+
+cd /$Name/source										#step 5: go to source dir
+read executable_file
+$NewProject >> compile << EOT
+
+if [ "$executable_file" == "*.c" ]; then							# if the file is a .c file then execute the following:
+	#input <std.io>
+	#input <stlib.h>
+
+	echo "Do you want to use the -o switch?"; read o			#send
+		if[ $o == "no" ]; then
+			$o= ""
+		else
+			$o == "-o"
+		fi
+
+	echo "Please input your C source file names"
+	read filenames
+
+	if [ -z $filenames]; then
+		echo "You are missing file names. Type in: compile -o executable_name file_name(s)"
+	fi
+
+	gcc $o $executable_file $filenames
+EOT
+
+else #the file is a bash file
+	#!/bin/bash
+	chmod +x /$Name/source/compile
+	EOT
+fi
